@@ -9,4 +9,10 @@ public interface IEmployeeService
     Task<List<Employee>> GetAllEmployees();
     Task<Employee> UpdateEmployee(Employee employee);
     Task<bool> DeleteEmployee(int id);
+
+    Task<IEnumerable<Role>> GetEmployeeRolesById(int id);
+    Task<bool> AddEmployeeRole(int id, int roleId);
+
+    Task<IEnumerable<Skill>> GetEmployeeSkillsById(int id);
+    Task<bool> AddEmployeeSkill(int id, int skillId);
 }

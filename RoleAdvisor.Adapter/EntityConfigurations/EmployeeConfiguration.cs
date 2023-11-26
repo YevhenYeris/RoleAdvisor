@@ -4,7 +4,7 @@ using RoleAdvisor.Domain.Entities;
 
 namespace RoleAdvisor.Adapter.EntityConfigurations;
 
-internal class EmployeeConfigyration : IEntityTypeConfiguration<Employee>
+internal class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {

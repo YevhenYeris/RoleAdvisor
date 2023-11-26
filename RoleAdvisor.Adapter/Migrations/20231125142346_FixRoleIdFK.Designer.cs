@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoleAdvisor.Adapter;
 
@@ -11,9 +12,11 @@ using RoleAdvisor.Adapter;
 namespace RoleAdvisor.Adapter.Migrations
 {
     [DbContext(typeof(RoleAdvisorContext))]
-    partial class RoleAdvisorContextModelSnapshot : ModelSnapshot
+    [Migration("20231125142346_FixRoleIdFK")]
+    partial class FixRoleIdFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,24 +58,6 @@ namespace RoleAdvisor.Adapter.Migrations
                     b.ToTable("EmployeeRole");
                 });
 
-            modelBuilder.Entity("PositionSkill", b =>
-                {
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionRoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SkillId", "PositionProjectId", "PositionRoleId");
-
-                    b.HasIndex("PositionProjectId", "PositionRoleId");
-
-                    b.ToTable("PositionSkill");
-                });
-
             modelBuilder.Entity("RoleAdvisor.Domain.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -98,7 +83,7 @@ namespace RoleAdvisor.Adapter.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PickedEmployeeId")
+                    b.Property<int>("PickedEmployeeId")
                         .HasColumnType("int");
 
                     b.HasKey("ProjectId", "RoleId");
@@ -164,17 +149,9 @@ namespace RoleAdvisor.Adapter.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PositionRoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("PositionProjectId", "PositionRoleId");
 
                     b.ToTable("Skills");
                 });
@@ -209,27 +186,13 @@ namespace RoleAdvisor.Adapter.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PositionSkill", b =>
-                {
-                    b.HasOne("RoleAdvisor.Domain.Entities.Skill", null)
-                        .WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RoleAdvisor.Domain.Entities.Position", null)
-                        .WithMany()
-                        .HasForeignKey("PositionProjectId", "PositionRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RoleAdvisor.Domain.Entities.Position", b =>
                 {
                     b.HasOne("RoleAdvisor.Domain.Entities.Employee", null)
                         .WithMany("PositionsPickedFor")
                         .HasForeignKey("PickedEmployeeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("RoleAdvisor.Domain.Entities.Project", null)
                         .WithMany("Positions")
@@ -258,10 +221,6 @@ namespace RoleAdvisor.Adapter.Migrations
                     b.HasOne("RoleAdvisor.Domain.Entities.Employee", null)
                         .WithMany("Skills")
                         .HasForeignKey("EmployeeId");
-
-                    b.HasOne("RoleAdvisor.Domain.Entities.Position", null)
-                        .WithMany("SkillsRequired")
-                        .HasForeignKey("PositionProjectId", "PositionRoleId");
                 });
 
             modelBuilder.Entity("RoleAdvisor.Domain.Entities.Employee", b =>
@@ -271,11 +230,6 @@ namespace RoleAdvisor.Adapter.Migrations
                     b.Navigation("ProjectsCreated");
 
                     b.Navigation("Skills");
-                });
-
-            modelBuilder.Entity("RoleAdvisor.Domain.Entities.Position", b =>
-                {
-                    b.Navigation("SkillsRequired");
                 });
 
             modelBuilder.Entity("RoleAdvisor.Domain.Entities.Project", b =>

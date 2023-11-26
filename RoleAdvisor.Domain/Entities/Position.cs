@@ -6,7 +6,9 @@ public class Position
 
     public int RoleId { get; set; }
 
-    public int PickedEmployeeId { get; set; }
+    public int? PickedEmployeeId { get; set; }
 
-    public ICollection<Employee> AdvisedEmployees { get; set; } = null!;
+    public ICollection<Skill> SkillsRequired { get; set; } = new List<Skill>();
+
+    public ICollection<Employee> AdvisedEmployees { get; set; } = new List<Employee>();
 }

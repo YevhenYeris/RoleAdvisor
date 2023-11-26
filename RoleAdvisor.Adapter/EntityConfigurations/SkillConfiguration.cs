@@ -4,7 +4,7 @@ using RoleAdvisor.Domain.Entities;
 
 namespace RoleAdvisor.Adapter.EntityConfigurations;
 
-internal class SkillConfigyration : IEntityTypeConfiguration<Skill>
+internal class SkillConfiguration : IEntityTypeConfiguration<Skill>
 {
     public void Configure(EntityTypeBuilder<Skill> builder)
     {

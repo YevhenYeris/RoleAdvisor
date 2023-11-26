@@ -4,7 +4,7 @@ using RoleAdvisor.Domain.Entities;
 
 namespace RoleAdvisor.Adapter.EntityConfigurations;
 
-internal class PositionConfigyration : IEntityTypeConfiguration<Position>
+internal class PositionConfiguration : IEntityTypeConfiguration<Position>
 {
     public void Configure(EntityTypeBuilder<Position> builder)
     {
@@ -18,7 +18,7 @@ internal class PositionConfigyration : IEntityTypeConfiguration<Position>
 
         builder.HasOne<Role>()
             .WithMany()
-            .HasForeignKey(e => e.ProjectId)
+            .HasForeignKey(e => e.RoleId)
             .IsRequired()
             .OnDelete(DeleteBehavior.NoAction);
 
@@ -26,6 +26,9 @@ internal class PositionConfigyration : IEntityTypeConfiguration<Position>
             .WithMany(e => e.PositionsPickedFor)
             .HasForeignKey(e => e.PickedEmployeeId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany<Skill>()
+            .WithMany();
 
         builder.HasMany<Employee>(e => e.AdvisedEmployees)
             .WithMany();

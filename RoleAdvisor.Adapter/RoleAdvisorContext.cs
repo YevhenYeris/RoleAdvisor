@@ -4,6 +4,11 @@ using RoleAdvisor.Domain.Entities;
 
 namespace RoleAdvisor.Adapter;
 
+/**
+ * Add-Migration MigrationName -project RoleAdvisor.Adapter -startupproject RoleAdvisor.API -o Migrations
+ * Update-Database -project RoleAdvisor.Adapter -startupproject RoleAdvisor.API
+**/
+
 public class RoleAdvisorContext : DbContext
 {
     public RoleAdvisorContext(DbContextOptions<RoleAdvisorContext> options)
@@ -24,10 +29,10 @@ public class RoleAdvisorContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new EmployeeConfigyration());
-        builder.ApplyConfiguration(new SkillConfigyration());
+        builder.ApplyConfiguration(new EmployeeConfiguration());
+        builder.ApplyConfiguration(new SkillConfiguration());
         builder.ApplyConfiguration(new ProjectConfigyration());
         builder.ApplyConfiguration(new RoleConfigyration());
-        builder.ApplyConfiguration(new PositionConfigyration());
+        builder.ApplyConfiguration(new PositionConfiguration());
     }
 }

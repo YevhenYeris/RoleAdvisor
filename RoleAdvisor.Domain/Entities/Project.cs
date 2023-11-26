@@ -8,5 +8,5 @@ public class Project
 
     public int CreatorId { get; set; }
 
-    public ICollection<Position> Positions { get; set; } = null!;
+    public ICollection<Position> Positions { get; set; } = new List<Position>();
 }

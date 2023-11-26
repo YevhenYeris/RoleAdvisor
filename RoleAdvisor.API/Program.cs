@@ -1,9 +1,12 @@
 using RoleAdvisor.Adapter;
+using RoleAdvisor.API.Automapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddRoleAdvisorAdapterModule(builder.Configuration.GetConnectionString("RoleAdvisorDB")!);
+builder.Services.AddRoleAdvisorApplicationModule();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
