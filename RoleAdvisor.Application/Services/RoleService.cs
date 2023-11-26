@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoleAdvisor.Application.Services;
 
-public class RoleService : IRoleService
+internal class RoleService : IRoleService
 {
     private readonly RoleAdvisorContext _context;
 

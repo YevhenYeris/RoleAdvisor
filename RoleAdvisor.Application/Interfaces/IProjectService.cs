@@ -15,3 +15,4 @@ public interface IProjectService
     Task<IEnumerable<Position>> GetProjectPositionsById(int id);
     Task<bool> AddPositionToProject(int projectId, Position position);
 }
+

@@ -9,19 +9,21 @@ public class RecommendationService : IRecommendationService
 {
     private readonly IProjectService _projectService;
     private readonly IEmployeeService _employeeService;
+    private readonly IReadService<Employee> _readService;
     private readonly TOPSIS _topsis;
 
-    public RecommendationService(IProjectService projectService, IEmployeeService employeeService)
+    public RecommendationService(IProjectService projectService, IEmployeeService employeeService, IReadService<Employee> readService)
     {
         _projectService = projectService;
         _employeeService = employeeService;
         _topsis = new TOPSIS();
+        _readService = readService;
     }
 
     public async Task<Project> SelectBestEmployees(int projectId)
     {
         var project = await _projectService.GetProjectById(projectId);
-        var employees = await _employeeService.GetAllEmployees();
+        var employees = await _readService.GetAllEntities();
 
         var recommendation = _topsis.SelectBestEmployees(employees, project.Positions.ToList());
 

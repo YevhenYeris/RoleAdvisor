@@ -11,19 +11,23 @@ namespace RoleAdvisor.API.Controllers;
 public class EmployeesController : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
+    private readonly IReadService<Employee> _readService;
+    private readonly IWriteService<Employee> _writeService;
     private readonly IMapper _mapper;
 
-    public EmployeesController(IEmployeeService employeeService, IMapper mapper)
+    public EmployeesController(IEmployeeService employeeService, IReadService<Employee> readService, IWriteService<Employee> writeService, IMapper mapper)
     {
         _employeeService = employeeService;
         _mapper = mapper;
+        _readService = readService;
+        _writeService = writeService;
     }
 
     // GET api/employee
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetAllEmployees()
     {
-        var employees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeModel>>(await _employeeService.GetAllEmployees());
+        var employees = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeModel>>(await _readService.GetAllEntities());
         return Ok(employees);
     }
 
@@ -31,7 +35,7 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<EmployeeModel>> GetEmployeeById(int id)
     {
-        var employee = await _employeeService.GetEmployeeById(id);
+        var employee = await _readService.GetEntityById(id);
 
         if (employee == null)
         {
@@ -45,7 +49,7 @@ public class EmployeesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EmployeeModel>> AddEmployee([FromBody] EmployeeModel employee)
     {
-        var newEmployee = await _employeeService.AddEmployee(_mapper.Map<EmployeeModel, Employee>(employee));
+        var newEmployee = await _writeService.AddEntity(_mapper.Map<EmployeeModel, Employee>(employee));
         return CreatedAtAction(nameof(GetEmployeeById), new { id = newEmployee.Id }, newEmployee);
     }
 
@@ -58,7 +62,7 @@ public class EmployeesController : ControllerBase
             return BadRequest();
         }
 
-        var updatedEmployee = await _employeeService.UpdateEmployee(_mapper.Map<EmployeeModel, Employee>(employee));
+        var updatedEmployee = await _writeService.UpdateEntity(_mapper.Map<EmployeeModel, Employee>(employee));
 
         if (updatedEmployee == null)
         {
@@ -72,7 +76,7 @@ public class EmployeesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<bool>> DeleteEmployee(int id)
     {
-        var result = await _employeeService.DeleteEmployee(id);
+        var result = await _writeService.DeleteEntity(id);
 
         if (!result)
         {

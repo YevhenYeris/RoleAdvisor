@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoleAdvisor.Application.Services;
 
-public class SkillService : ISkillService
+internal class SkillService : ISkillService
 {
     private readonly RoleAdvisorContext _context;
 

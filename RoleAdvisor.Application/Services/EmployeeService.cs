@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoleAdvisor.Application.Services;
 
-public class EmployeeService : IEmployeeService
+internal class EmployeeService : IEmployeeService, IReadService<Employee>, IWriteService<Employee>
 {
     private readonly RoleAdvisorContext _context;
 
@@ -18,7 +18,7 @@ public class EmployeeService : IEmployeeService
     }
 
     // Create
-    public async Task<Employee> AddEmployee(Employee employee)
+    public async Task<Employee> AddEntity(Employee employee)
     {
         _context.Employees.Add(employee);
         await _context.SaveChangesAsync();
@@ -26,7 +26,7 @@ public class EmployeeService : IEmployeeService
     }
 
     // Read
-    public async Task<Employee> GetEmployeeById(int id)
+    public async Task<Employee> GetEntityById(int id)
     {
         return (await _context.Employees
             .Include(e => e.Skills)
@@ -36,13 +36,13 @@ public class EmployeeService : IEmployeeService
             .FirstOrDefaultAsync(e => e.Id == id))!;
     }
 
-    public async Task<List<Employee>> GetAllEmployees()
+    public async Task<List<Employee>> GetAllEntities()
     {
         return await _context.Employees.ToListAsync();
     }
 
     // Update
-    public async Task<Employee> UpdateEmployee(Employee employee)
+    public async Task<Employee> UpdateEntity(Employee employee)
     {
         _context.Entry(employee).State = EntityState.Modified;
         await _context.SaveChangesAsync();
@@ -50,7 +50,7 @@ public class EmployeeService : IEmployeeService
     }
 
     // Delete
-    public async Task<bool> DeleteEmployee(int id)
+    public async Task<bool> DeleteEntity(int id)
     {
         var employee = await _context.Employees.FindAsync(id);
 
@@ -64,7 +64,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<IEnumerable<Role>> GetEmployeeRolesById(int id)
     {
-        var employee = await GetEmployeeById(id);
+        var employee = await GetEntityById(id);
 
         if (employee == null)
             return null!;
@@ -74,7 +74,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> AddEmployeeRole(int id, int roleId)
     {
-        var employee = await GetEmployeeById(id);
+        var employee = await GetEntityById(id);
 
         if (employee == null)
             return false;
@@ -92,7 +92,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<IEnumerable<Skill>> GetEmployeeSkillsById(int id)
     {
-        var employee = await GetEmployeeById(id);
+        var employee = await GetEntityById(id);
 
         if (employee == null)
             return null!;
@@ -102,7 +102,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> AddEmployeeSkill(int id, int skillId)
     {
-        var employee = await GetEmployeeById(id);
+        var employee = await GetEntityById(id);
 
         if (employee == null)
             return false;
